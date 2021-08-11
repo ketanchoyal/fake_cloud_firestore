@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'pointer.dart';
 
 dynamic getSubpath(Map<String, dynamic> root, String path) {
   return _getSubpath(root, path.split('/'));
@@ -93,4 +94,20 @@ void validateDocumentValue(dynamic value) {
     return;
   }
   throw ArgumentError.value(value);
+}
+
+/// Helper method exposed to determine whether a given [collectionPath] points to
+/// a valid Firestore collection.
+///
+/// This is exposed to keep the [Pointer] internal to this library.
+bool isValidCollectionPath(String collectionPath) {
+  return Pointer(collectionPath).isCollection();
+}
+
+/// Helper method exposed to determine whether a given [documentPath] points to
+/// a valid Firestore document.
+///
+/// This is exposed to keep the [Pointer] internal to this library.
+bool isValidDocumentPath(String documentPath) {
+  return Pointer(documentPath).isDocument();
 }

@@ -25,9 +25,18 @@ class FakeFirebaseFirestore implements FirebaseFirestore {
 
   @override
   CollectionReference<Map<String, dynamic>> collection(String path) {
-    final segments = path.split('/');
-    assert(segments.length % 2 == 1,
-        'Invalid document reference. Collection references must have an odd number of segments');
+    assert(
+      path.isNotEmpty,
+      'a collectionPath path must be a non-empty string',
+    );
+    assert(
+      !path.contains('//'),
+      'a collection path must not contain "//"',
+    );
+    assert(
+      isValidCollectionPath(path),
+      'a collection path must point to a valid collection.',
+    );
     return MockCollectionReference(this, path, getSubpath(_root, path),
         _docsData, getSubpath(_snapshotStreamControllerRoot, path));
   }
@@ -49,12 +58,18 @@ class FakeFirebaseFirestore implements FirebaseFirestore {
 
   @override
   DocumentReference<Map<String, dynamic>> doc(String path) {
-    final segments = path.split('/');
-    // The actual behavior of Firestore for an invalid number of segments
-    // differs by platforms. This library imitates it with assert.
-    // https://github.com/atn832/fake_cloud_firestore/issues/30
-    assert(segments.length % 2 == 0,
-        'Invalid document reference. Document references must have an even number of segments');
+    assert(
+      path.isNotEmpty,
+      'a document path must be a non-empty string',
+    );
+    assert(
+      !path.contains('//'),
+      'a collection path must not contain "//"',
+    );
+    assert(
+      isValidDocumentPath(path),
+      'a document path must point to a valid document.',
+    );
     final documentId = segments.last;
     return MockDocumentReference(
         this,
