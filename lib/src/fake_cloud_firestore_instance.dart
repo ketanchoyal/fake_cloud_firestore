@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_platform_interface/cloud_firestore_platform_interface.dart'
     as firestore_interface;
+import 'package:fake_cloud_firestore/src/pointer.dart';
 import 'package:flutter/services.dart';
 
 import 'mock_collection_reference.dart';
@@ -70,7 +71,7 @@ class FakeFirebaseFirestore implements FirebaseFirestore {
       isValidDocumentPath(path),
       'a document path must point to a valid document.',
     );
-    final documentId = segments.last;
+    final documentId = Pointer(path).id;
     return MockDocumentReference(
         this,
         path,
